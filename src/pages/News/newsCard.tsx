@@ -10,11 +10,11 @@ import {
 import moment from "moment";
 
 interface NewsCardProps {
-  article: any;
-  demoImage: string;
+  article: any // eslint-disable-line @typescript-eslint/no-explicit-any 
+  demoImageUrl: string;
 }
 
-const NewsCard: React.FC<NewsCardProps> = ({ article, demoImage }) => {
+const NewsCard: React.FC<NewsCardProps> = ({ article, demoImageUrl }) => {
   return (
     <Grid item xs={12} sm={6} md={4}>
       <Card>
@@ -22,7 +22,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ article, demoImage }) => {
           <CardMedia
             component="img"
             height="140"
-            image={article.photo_url || demoImage}
+            image={article.photo_url || demoImageUrl}
             alt={article.title}
           />
           <CardContent>

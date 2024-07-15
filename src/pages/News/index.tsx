@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useGetCryptoNewsQuery } from "../../services/cryptoNewsApi";
 import { Grid, Typography } from "@mui/material";
@@ -23,9 +22,14 @@ const News: React.FC<NewsProps> = ({ crypto }) => {
         Crypto News
       </Typography>
       <Grid container spacing={4}>
-        {data?.data?.map((article: any, index: number) => (
-          <NewsCard key={index} article={article} demoImage={demoImage} />
-        ))}
+        {data?.data?.map(
+          (
+            article: any, // eslint-disable-line @typescript-eslint/no-explicit-any
+            index: number
+          ) => (
+            <NewsCard key={index} article={article} demoImageUrl={demoImage} />
+          )
+        )}
       </Grid>
     </div>
   );
