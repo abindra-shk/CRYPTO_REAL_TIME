@@ -28,9 +28,13 @@ const News: React.FC<NewsProps> = ({ crypto }) => {
     <div>
       <Typography variant="h4" gutterBottom>
         Crypto News
+        {/* {data} */}
+        {/* {data.map((item) => (
+          <li key={item.id}>{item.title}</li>
+        ))} */}
       </Typography>
       <Grid container spacing={4}>
-        {data?.articles?.map((article: any, index: number) => (
+        {data?.data?.map((article: any, index: number) => (
           <Grid item xs={12} sm={6} md={4} key={index}>
             <Card>
               <a href={article.link} target="_blank" rel="noopener noreferrer">
