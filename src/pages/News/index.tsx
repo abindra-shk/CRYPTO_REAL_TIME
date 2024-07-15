@@ -1,90 +1,85 @@
-import React, { useState } from "react";
-// import {
-//   Select,
-//   MenuItem,
-//   Typography,
-//   Grid,
-//   Avatar,
-//   Card,
-//   CardContent,
-//   CardMedia,
-// } from "@mui/material";
-// import moment from "moment";
+import React from "react";
 import { useGetCryptoNewsQuery } from "../../services/cryptoNewsApi";
+import {
+  Grid,
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Avatar,
+} from "@mui/material";
+import moment from "moment";
 
-// const demoImage =
-//   "https://www.bing.com/th?id=OVFT.mpzuVZnv8dwIMRfQGPbOPC&pid=News";
-// const { Text, Title } = Typography;
+interface NewsProps {
+  crypto: string;
+}
 
-const News: React.FC = () => {
-  const [newsCategory, setNewsCategory] = useState<string>("Cryptocurrency");
-  const { data: cryptoNews } = useGetCryptoNewsQuery({
-    newsCategory,
-    count: 6,
-  });
-  console.log("data in news", cryptoNews);
+const demoImage =
+  "https://www.bing.com/th?id=OVFT.mpzuVZnv8dwIMRfQGPbOPC&pid=News";
 
-  //   if (cryptoNews?.value) return <Typography>Loading...</Typography>;
-  //   if (error) return <Typography>Error loading news</Typography>;
+const News: React.FC<NewsProps> = ({ crypto }) => {
+  const { data, error, isLoading } = useGetCryptoNewsQuery({ crypto });
+
+  if (isLoading) return <Typography>Loading...</Typography>;
+  if (error) return <Typography>Error fetching data</Typography>;
+  console.log("data is =>", data);
 
   return (
-    // <Grid container spacing={4}>
-    //   {!simplified && (
-    //     <Grid item xs={12}>
-    //       <Select
-    //         value={newsCategory}
-    //         onChange={(e) => setNewsCategory(e.target.value)}
-    //         displayEmpty
-    //         fullWidth
-    //         variant="outlined"
-    //       >
-    //         <MenuItem value="Cryptocurrency">Cryptocurrency</MenuItem>
-    //         {/* {data?.data?.coins?.map((currency) => (
-    //           <MenuItem key={currency.id} value={currency.name}>{currency.name}</MenuItem>
-    //         ))} */}
-    //       </Select>
-    //     </Grid>
-    //   )}
-    //   {cryptoNews?.value.map((news, i) => (
-    //     <Grid item xs={12} sm={6} lg={4} key={i}>
-    //       <Card variant="outlined">
-    //         <a href={news.url} target="_blank" rel="noopener noreferrer">
-    //           <CardMedia
-    //             component="img"
-    //             height="140"
-    //             image={news?.image?.thumbnail?.contentUrl || demoImage}
-    //             alt="news"
-    //           />
-    //           <CardContent>
-    //             <Title variant="h6" component="div">
-    //               {news.name}
-    //             </Title>
-    //             <Typography variant="body2" color="textSecondary">
-    //               {news.description.length > 100
-    //                 ? `${news.description.substring(0, 100)}...`
-    //                 : news.description}
-    //             </Typography>
-    //             <Grid
-    //               container
-    //               alignItems="center"
-    //               justifyContent="space-between"
-    //               style={{ marginTop: "10px" }}
-    //             >
-    //               {/* <Grid item>
-    //                 <Avatar src={news.provider[0]?.image?.thumbnail?.contentUrl || demoImage} alt="" />
-    //                 <Typography variant="caption" display="block">{news.provider[0]?.name}</Typography>
-    //               </Grid> */}
-    //               {/* <Grid item>
-    //                 <Typography variant="caption">{moment(news.datePublished).startOf('ss').fromNow()}</Typography>
-    //               </Grid> */}
-    //             </Grid>
-    //           </CardContent>
-    //         </a>
-    //       </Card>
-    //     </Grid>
-    //   ))}
-    // </Grid>
-    <>NEWS </>
+    <div>
+      <Typography variant="h4" gutterBottom>
+        Crypto News
+      </Typography>
+      <Grid container spacing={4}>
+        {data?.articles?.map((article: any, index: number) => (
+          <Grid item xs={12} sm={6} md={4} key={index}>
+            <Card>
+              <a href={article.link} target="_blank" rel="noopener noreferrer">
+                <CardMedia
+                  component="img"
+                  height="140"
+                  image={article.photo_url || demoImage}
+                  alt={article.title}
+                />
+                <CardContent>
+                  <Typography variant="h6">{article.title}</Typography>
+                  <Grid
+                    container
+                    alignItems="center"
+                    spacing={1}
+                    style={{ marginTop: "10px" }}
+                  >
+                    <Grid item>
+                      <Avatar
+                        src={article.source_favicon_url}
+                        alt="source logo"
+                      />
+                    </Grid>
+                    <Grid item>
+                      <Typography variant="caption" display="block">
+                        <a
+                          href={article.source_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {article.source_url}
+                        </a>
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <Typography variant="caption">
+                        {moment(article.published_datetime_utc)
+                          .startOf("ss")
+                          .fromNow()}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </a>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+    </div>
   );
 };
 
