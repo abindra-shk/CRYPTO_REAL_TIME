@@ -98,7 +98,6 @@ const Cryptocurrencies: React.FC<CryptocurrenciesProps> = ({ simplified }) => {
             >
               {isFetching ? 'Loading...' : 'Refetch Data'}
             </Button>
-            
           </Box>
           <CryptoGrid cryptos={cryptos} />
         </Box>

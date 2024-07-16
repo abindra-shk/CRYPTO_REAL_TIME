@@ -12,7 +12,15 @@ import {
   Legend,
 } from 'chart.js';
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, ChartTitle, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  ChartTitle,
+  Tooltip,
+  Legend
+);
 
 interface LineChartProps {
   coinHistory: any;
@@ -20,7 +28,11 @@ interface LineChartProps {
   coinName: string;
 }
 
-const LineChart: React.FC<LineChartProps> = ({ coinHistory, currentPrice, coinName }) => {
+const LineChart: React.FC<LineChartProps> = ({
+  coinHistory,
+  currentPrice,
+  coinName,
+}) => {
   if (!coinHistory?.data?.history) return null; // Avoid rendering until data is available
 
   const coinPrice: string[] = [];
@@ -32,7 +44,11 @@ const LineChart: React.FC<LineChartProps> = ({ coinHistory, currentPrice, coinNa
 
   for (let i = 0; i < coinHistory.data.history.length; i += 1) {
     // Multiply timestamp by 1000 to convert to milliseconds
-    coinTimestamp.push(new Date(coinHistory.data.history[i].timestamp * 1000).toLocaleDateString());
+    coinTimestamp.push(
+      new Date(
+        coinHistory.data.history[i].timestamp * 1000
+      ).toLocaleDateString()
+    );
   }
 
   // Reverse the arrays to show the current date on the right
@@ -62,7 +78,14 @@ const LineChart: React.FC<LineChartProps> = ({ coinHistory, currentPrice, coinNa
 
   return (
     <>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          mb: 3,
+        }}
+      >
         <Typography variant="h4" component="h2">
           {coinName} Price Chart
         </Typography>
