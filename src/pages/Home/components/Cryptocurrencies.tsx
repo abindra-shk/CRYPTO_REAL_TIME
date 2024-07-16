@@ -1,28 +1,41 @@
 import React, { useEffect, useState } from 'react';
-import millify from 'millify';
-import { Link } from 'react-router-dom';
 import {
-  Card,
-  Grid,
-  TextField,
   Box,
   Typography,
-  CardContent,
-  CardMedia,
+  TextField,
+  Button,
+  Select,
+  MenuItem,
 } from '@mui/material';
-
 import Loader from './Loader';
 import { useGetCryptosQuery } from '../../../services/cryptoApi';
+import CryptoGrid from './CryptoGrid'; // Import the new component
 
 interface CryptocurrenciesProps {
   simplified: boolean;
 }
 
+const intervalOptions = [
+  { label: 'Off', value: 0 },
+  { label: '3s', value: 3000 },
+  { label: '5s', value: 5000 },
+  { label: '10s', value: 10000 },
+  { label: '1m', value: 60000 },
+];
+
 const Cryptocurrencies: React.FC<CryptocurrenciesProps> = ({ simplified }) => {
   const count = simplified ? 10 : 100;
-  const { data: cryptosList, isFetching } = useGetCryptosQuery(count);
   const [cryptos, setCryptos] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [pollingInterval, setPollingInterval] = useState<number>(0);
+
+  const {
+    data: cryptosList,
+    isFetching,
+    refetch,
+  } = useGetCryptosQuery(count, {
+    pollingInterval: pollingInterval === 0 ? undefined : pollingInterval,
+  });
 
   useEffect(() => {
     setCryptos(cryptosList?.data?.coins || []);
@@ -37,58 +50,61 @@ const Cryptocurrencies: React.FC<CryptocurrenciesProps> = ({ simplified }) => {
   if (isFetching) return <Loader />;
 
   return (
-    <>
+    <Box
+      sx={!simplified ? { backgroundColor: '#f0f2f5', padding: '40px' } : {}}
+    >
       {!simplified && (
-        <Box mb={4}>
-          <TextField
-            label="Search Cryptocurrency"
-            variant="outlined"
-            fullWidth
-            onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
-          />
+        <Box
+          sx={{
+            backgroundColor: '#fff',
+            borderRadius: '8px',
+            padding: '20px',
+            boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+            marginBottom: '20px',
+          }}
+        >
+          <Typography variant="h4" sx={{ marginBottom: '20px' }}>
+            100 Cryptos In The World
+          </Typography>
+          <Box>
+            <TextField
+              label="Search Cryptocurrency"
+              variant="outlined"
+              fullWidth
+              onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
+              sx={{ marginBottom: '20px' }}
+            />
+          </Box>
+          <Box mb={2} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Typography variant="body1" component="div">
+              Polling Interval:
+              <Select
+                value={pollingInterval}
+                onChange={(e) => setPollingInterval(Number(e.target.value))}
+                style={{ marginLeft: '10px', minWidth: '80px' }}
+              >
+                {intervalOptions.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </Typography>
+            <Button
+              onClick={() => refetch()}
+              disabled={isFetching}
+              variant="contained"
+              color="primary"
+            >
+              {isFetching ? 'Loading...' : 'Refetch Data'}
+            </Button>
+            
+          </Box>
+          <CryptoGrid cryptos={cryptos} />
         </Box>
       )}
-      <Grid container spacing={4}>
-        {cryptos?.map((currency) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={currency.uuid}>
-            <Link
-              to={`/crypto/${currency.uuid}`}
-              style={{ textDecoration: 'none' }}
-            >
-              <Card variant="outlined" sx={{ height: '100%' }}>
-                <CardContent>
-                  <Box
-                    display="flex"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    mb={2}
-                  >
-                    <Typography variant="h6" component="div">
-                      {currency.rank}. {currency.name}
-                    </Typography>
-                    <CardMedia
-                      component="img"
-                      image={currency.iconUrl}
-                      alt={currency.name}
-                      sx={{ width: 40, height: 40 }}
-                    />
-                  </Box>
-                  <Typography variant="body2" color="textSecondary">
-                    Price: {millify(currency.price)}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    Market Cap: {millify(currency.marketCap)}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    Daily Change: {currency.change}%
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Link>
-          </Grid>
-        ))}
-      </Grid>
-    </>
+      {simplified && <CryptoGrid cryptos={cryptos} />}
+    </Box>
   );
 };
 
