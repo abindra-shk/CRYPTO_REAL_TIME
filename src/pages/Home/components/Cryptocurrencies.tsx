@@ -58,7 +58,7 @@ const Cryptocurrencies: React.FC<CryptocurrenciesProps> = ({ simplified }) => {
           sx={{
             backgroundColor: '#fff',
             borderRadius: '8px',
-            padding: '20px',
+            padding: '40px',
             boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
             marginBottom: '20px',
           }}
