@@ -6,7 +6,7 @@ interface CryptoGridProps {
   cryptos: any[];
 }
 
-const CryptoGrid: React.FC<CryptoGridProps> = ({ cryptos }) => (
+const CryptoGrid: React.FC<CryptoGridProps> = React.memo(({ cryptos }) => (
   <Grid container spacing={3}>
     {cryptos.map((currency) => (
       <Grid item xs={12} sm={6} md={4} lg={3} key={currency.uuid}>
@@ -14,6 +14,6 @@ const CryptoGrid: React.FC<CryptoGridProps> = ({ cryptos }) => (
       </Grid>
     ))}
   </Grid>
-);
+));
 
 export default CryptoGrid;
