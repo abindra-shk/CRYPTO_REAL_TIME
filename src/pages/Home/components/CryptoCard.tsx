@@ -14,6 +14,8 @@ interface CryptoCardProps {
 }
 
 const CryptoCard: React.FC<CryptoCardProps> = React.memo(({ currency }) => {
+  // console.log('CryptoCard rendered.')
+
   return (
     <Link to={`/crypto/${currency.uuid}`} style={{ textDecoration: 'none' }}>
       <Card
@@ -40,7 +42,7 @@ const CryptoCard: React.FC<CryptoCardProps> = React.memo(({ currency }) => {
             />
           </Box>
           <Typography variant="body2" color="textSecondary">
-            Price: {millify(currency.price)}
+            Price: {currency.price}
           </Typography>
           <Typography variant="body2" color="textSecondary">
             Market Cap: {millify(currency.marketCap)}

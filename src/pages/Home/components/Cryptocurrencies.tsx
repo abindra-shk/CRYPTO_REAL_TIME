@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   Box,
   Typography,
@@ -6,10 +6,12 @@ import {
   Button,
   Select,
   MenuItem,
+  SelectChangeEvent,
 } from '@mui/material';
-import Loader from './Loader';
 import { useGetCryptosQuery } from '../../../services/cryptoApi';
-import CryptoGrid from './CryptoGrid'; // Import the new component
+import CryptoGrid from './CryptoGrid';
+import { useDispatch } from 'react-redux';
+import { setData, setFetching } from './cryptoSlice';
 
 interface CryptocurrenciesProps {
   simplified: boolean;
@@ -26,31 +28,38 @@ const intervalOptions = [
 const Cryptocurrencies: React.FC<CryptocurrenciesProps> = React.memo(
   ({ simplified }) => {
     const count = simplified ? 10 : 100;
-    const [cryptos, setCryptos] = useState<any[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [pollingInterval, setPollingInterval] = useState<number>(0);
 
-    const {
-      data: cryptosList,
-      isFetching,
-      refetch,
-    } = useGetCryptosQuery(count, {
+    const { data: cryptosList, isFetching, refetch } = useGetCryptosQuery(count, {
       pollingInterval: pollingInterval === 0 ? undefined : pollingInterval,
     });
 
-    useEffect(() => {
-      const filteredData = cryptosList?.data?.coins.filter((item: any) =>
-        item.name.toLowerCase().includes(searchTerm)
-      );
-      setCryptos(filteredData || []);
-    }, [cryptosList, searchTerm]);
+    const dispatch = useDispatch();
 
-    if (isFetching) return <Loader />;
+    useEffect(() => {
+      if (cryptosList?.data?.coins) {
+        dispatch(setData(cryptosList.data.coins));
+        dispatch(setFetching(isFetching));
+      }
+    }, [cryptosList, dispatch, isFetching]);
+
+    const handleSearchTermChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchTerm(e.target.value.toLowerCase());
+    }, []);
+
+    const handlePollingIntervalChange = useCallback((e: SelectChangeEvent<number>) => {
+      setPollingInterval(Number(e.target.value));
+    }, []);
+
+    const handleRefetch = useCallback(() => {
+      refetch();
+    }, [refetch]);
+
+    console.log('Cryptocurrencies rendered');
 
     return (
-      <Box
-        sx={!simplified ? { backgroundColor: '#f0f2f5', padding: '40px' } : {}}
-      >
+      <Box sx={!simplified ? { backgroundColor: '#f0f2f5', padding: '40px' } : {}}>
         {!simplified && (
           <Box
             sx={{
@@ -69,7 +78,7 @@ const Cryptocurrencies: React.FC<CryptocurrenciesProps> = React.memo(
                 label="Search Cryptocurrency"
                 variant="outlined"
                 fullWidth
-                onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
+                onChange={handleSearchTermChange}
                 sx={{ marginBottom: '20px' }}
               />
             </Box>
@@ -81,7 +90,7 @@ const Cryptocurrencies: React.FC<CryptocurrenciesProps> = React.memo(
                 Polling Interval:
                 <Select
                   value={pollingInterval}
-                  onChange={(e) => setPollingInterval(Number(e.target.value))}
+                  onChange={handlePollingIntervalChange}
                   style={{ marginLeft: '10px', minWidth: '80px' }}
                 >
                   {intervalOptions.map((option) => (
@@ -92,7 +101,7 @@ const Cryptocurrencies: React.FC<CryptocurrenciesProps> = React.memo(
                 </Select>
               </Typography>
               <Button
-                onClick={() => refetch()}
+                onClick={handleRefetch}
                 disabled={isFetching}
                 variant="contained"
                 color="primary"
@@ -100,10 +109,10 @@ const Cryptocurrencies: React.FC<CryptocurrenciesProps> = React.memo(
                 {isFetching ? 'Loading...' : 'Refetch Data'}
               </Button>
             </Box>
-            <CryptoGrid cryptos={cryptos} />
+            <CryptoGrid searchTerm={searchTerm} />
           </Box>
         )}
-        {simplified && <CryptoGrid cryptos={cryptos} />}
+        {simplified && <CryptoGrid searchTerm={searchTerm} />}
       </Box>
     );
   }

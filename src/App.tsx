@@ -4,7 +4,7 @@ import theme from './themes/theme.ts';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import MainRoute from './routes/routes';
-import store from './store/store.ts';
+import { store}from './store/store.ts';
 
 function App() {
   return (
