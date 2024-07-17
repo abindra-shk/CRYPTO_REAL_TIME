@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   Box,
   Typography,
@@ -37,13 +37,6 @@ const Cryptocurrencies: React.FC<CryptocurrenciesProps> = React.memo(
 
     const dispatch = useDispatch();
 
-    useEffect(() => {
-      if (cryptosList?.data?.coins) {
-        dispatch(setData(cryptosList.data.coins));
-        dispatch(setFetching(isFetching));
-      }
-    }, [cryptosList, dispatch, isFetching]);
-
     const handleSearchTermChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
       setSearchTerm(e.target.value.toLowerCase());
     }, []);
@@ -55,6 +48,12 @@ const Cryptocurrencies: React.FC<CryptocurrenciesProps> = React.memo(
     const handleRefetch = useCallback(() => {
       refetch();
     }, [refetch]);
+
+    // Direct dispatch when cryptosList or isFetching changes
+    if (cryptosList?.data?.coins) {
+      dispatch(setData(cryptosList.data.coins));
+    }
+    dispatch(setFetching(isFetching));
 
     console.log('Cryptocurrencies rendered');
 
