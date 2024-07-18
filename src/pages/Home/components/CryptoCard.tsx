@@ -1,8 +1,8 @@
 import React from 'react';
 import { Card, CardContent, CardMedia, Typography, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
-import millify from 'millify';
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
+import millify from 'millify';
 
 interface CryptoCardProps {
   currency: any;
@@ -42,20 +42,20 @@ const CryptoCard: React.FC<CryptoCardProps> = React.memo(({ currency }) => {
             />
           </Box>
           <Typography variant="body2" color="textSecondary">
-            Price:{' '}
+            <strong>Price:</strong>{' '}
             <span style={{ color: isPositiveChange ? 'green' : 'red' }}>
-              {currency.price}
+              ${currency.price}
             </span>
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            Market Cap: {millify(currency.marketCap)}
+            <strong>Market Cap:</strong> {millify(currency.marketCap)}
           </Typography>
           <Typography
             variant="body2"
             color="textSecondary"
             sx={{ display: 'flex', alignItems: 'center' }}
           >
-            Daily Change:
+            <strong>Daily Change:</strong>
             {isPositiveChange ? (
               <ArrowDropUp sx={{ color: 'green' }} />
             ) : (
@@ -69,6 +69,9 @@ const CryptoCard: React.FC<CryptoCardProps> = React.memo(({ currency }) => {
             >
               {Math.abs(currency.change)}%
             </span>
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            <strong>Volume(24h):</strong> {millify(currency['24hVolume'])}
           </Typography>
         </CardContent>
       </Card>
