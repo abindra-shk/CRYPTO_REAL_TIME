@@ -24,7 +24,7 @@ const News: React.FC<NewsProps> = ({ crypto, limit }) => {
 
   const newsContent = (
     <Grid container spacing={4}>
-      {data?.data?.slice((page - 1) * 10, page * 10).map(
+      {data?.data?.slice((page - 1) * 9, page * 9).map(
         (
           article: any, // eslint-disable-line @typescript-eslint/no-explicit-any
           index: number
@@ -56,7 +56,7 @@ const News: React.FC<NewsProps> = ({ crypto, limit }) => {
         {data?.data.length > 0 && (
           <Stack spacing={2} sx={{ alignItems: 'center', marginTop: '20px' }}>
             <Pagination
-              count={Math.ceil(data?.data.length / 10)}
+              count={Math.ceil(data?.data.length / 9)}
               page={page}
               onChange={handlePageChange}
               variant="outlined"
