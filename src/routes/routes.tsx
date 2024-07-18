@@ -9,7 +9,7 @@ const MainRoute: React.FC = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/news" element={<News />} />
+      <Route path="/news" element={<News crypto="crypto" />} />
       <Route
         path="/cryptocurrencies"
         element={<Cryptocurrencies simplified={false} />}

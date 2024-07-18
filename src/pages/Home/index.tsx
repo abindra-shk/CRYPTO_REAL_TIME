@@ -156,7 +156,7 @@ const Home = () => {
             <Link to="/news">Show more</Link>
           </Typography>
         </Box>
-        <News />
+        <News crypto={"crypto"} limit={6}/>
       </Box>
     </Box>
   );
