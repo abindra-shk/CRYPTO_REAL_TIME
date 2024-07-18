@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -30,6 +30,7 @@ const Cryptocurrencies: React.FC<CryptocurrenciesProps> = React.memo(
     const count = simplified ? 10 : 100;
     const [searchTerm, setSearchTerm] = useState('');
     const [pollingInterval, setPollingInterval] = useState<number>(0);
+    const [initialRender, setInitialRender] = useState(true);
 
     const { data: cryptosList, isFetching, refetch } = useGetCryptosQuery(count, {
       pollingInterval: pollingInterval === 0 ? undefined : pollingInterval,
@@ -49,11 +50,20 @@ const Cryptocurrencies: React.FC<CryptocurrenciesProps> = React.memo(
       refetch();
     }, [refetch]);
 
+    // Set initialRender to false after the first render
+    useEffect(() => {
+      if (!isFetching) {
+        setInitialRender(false);
+      }
+    }, [isFetching]);
+
     // Direct dispatch when cryptosList or isFetching changes
-    if (cryptosList?.data?.coins) {
-      dispatch(setData(cryptosList.data.coins));
-    }
-    dispatch(setFetching(isFetching));
+    useEffect(() => {
+      if (cryptosList?.data?.coins) {
+        dispatch(setData(cryptosList.data.coins));
+      }
+      dispatch(setFetching(isFetching));
+    }, [cryptosList, isFetching, dispatch]);
 
     console.log('Cryptocurrencies rendered');
 
@@ -101,11 +111,11 @@ const Cryptocurrencies: React.FC<CryptocurrenciesProps> = React.memo(
               </Typography>
               <Button
                 onClick={handleRefetch}
-                disabled={isFetching}
+                // disabled={isFetching}
                 variant="contained"
                 color="primary"
               >
-                {isFetching ? 'Loading...' : 'Refetch Data'}
+                {isFetching && initialRender ? 'Loading...' : 'Refetch Data'}
               </Button>
             </Box>
             <CryptoGrid searchTerm={searchTerm} />

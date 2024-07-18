@@ -48,7 +48,7 @@ const CryptoCard: React.FC<CryptoCardProps> = React.memo(({ currency }) => {
             </span>
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            <strong>Market Cap:</strong> {millify(currency.marketCap)}
+            <strong>Market Cap:</strong> ${millify(currency.marketCap)}
           </Typography>
           <Typography
             variant="body2"
@@ -71,7 +71,7 @@ const CryptoCard: React.FC<CryptoCardProps> = React.memo(({ currency }) => {
             </span>
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            <strong>Volume(24h):</strong> {millify(currency['24hVolume'])}
+            <strong>Volume(24h):</strong> ${currency['24hVolume']}
           </Typography>
         </CardContent>
       </Card>
