@@ -1,20 +1,15 @@
 import React from 'react';
-import {
-  Card,
-  CardContent,
-  CardMedia,
-  Typography,
-  Box,
-} from '@mui/material';
+import { Card, CardContent, CardMedia, Typography, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
 import millify from 'millify';
+import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 
 interface CryptoCardProps {
   currency: any;
 }
 
 const CryptoCard: React.FC<CryptoCardProps> = React.memo(({ currency }) => {
-  // console.log('CryptoCard rendered.')
+  const isPositiveChange = currency.change > 0;
 
   return (
     <Link to={`/crypto/${currency.uuid}`} style={{ textDecoration: 'none' }}>
@@ -30,7 +25,12 @@ const CryptoCard: React.FC<CryptoCardProps> = React.memo(({ currency }) => {
         }}
       >
         <CardContent>
-          <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            mb={1}
+          >
             <Typography variant="subtitle1">
               {currency.rank}. {currency.name}
             </Typography>
@@ -42,13 +42,33 @@ const CryptoCard: React.FC<CryptoCardProps> = React.memo(({ currency }) => {
             />
           </Box>
           <Typography variant="body2" color="textSecondary">
-            Price: {currency.price}
+            Price:{' '}
+            <span style={{ color: isPositiveChange ? 'green' : 'red' }}>
+              {currency.price}
+            </span>
           </Typography>
           <Typography variant="body2" color="textSecondary">
             Market Cap: {millify(currency.marketCap)}
           </Typography>
-          <Typography variant="body2" color="textSecondary">
-            Daily Change: {currency.change}%
+          <Typography
+            variant="body2"
+            color="textSecondary"
+            sx={{ display: 'flex', alignItems: 'center' }}
+          >
+            Daily Change:
+            {isPositiveChange ? (
+              <ArrowDropUp sx={{ color: 'green' }} />
+            ) : (
+              <ArrowDropDown sx={{ color: 'red' }} />
+            )}
+            <span
+              style={{
+                color: isPositiveChange ? 'green' : 'red',
+                marginLeft: 1,
+              }}
+            >
+              {Math.abs(currency.change)}%
+            </span>
           </Typography>
         </CardContent>
       </Card>
