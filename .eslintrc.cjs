@@ -15,5 +15,6 @@ module.exports = {
       { allowConstantExport: true },
     ],
     '@typescript-eslint/no-explicit-any': 'off',
+    'quotes': ['error', 'single'], // Enforce single quotes
   },
 };
