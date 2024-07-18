@@ -5,12 +5,13 @@ import NewsCard from "./newsCard";
 
 interface NewsProps {
   crypto: string;
+  limit?: number;
 }
 
 const demoImage =
   "https://www.bing.com/th?id=OVFT.mpzuVZnv8dwIMRfQGPbOPC&pid=News";
 
-const News: React.FC<NewsProps> = ({ crypto }) => {
+const News: React.FC<NewsProps> = ({ crypto, limit }) => {
   const { data, error, isLoading } = useGetCryptoNewsQuery({ crypto });
 
   if (isLoading) return <Typography>Loading...</Typography>;
@@ -22,7 +23,8 @@ const News: React.FC<NewsProps> = ({ crypto }) => {
         Crypto News
       </Typography>
       <Grid container spacing={4}>
-        {data?.data?.map(
+       
+        {data?.data?.slice(0, limit || data?.data.length).map(
           (
             article: any, // eslint-disable-line @typescript-eslint/no-explicit-any
             index: number

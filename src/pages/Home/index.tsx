@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Typography } from "@mui/material";
+import News from "../News";
 const Home = () => {
   return (
     <>
@@ -12,6 +13,7 @@ const Home = () => {
           <Typography>
             <Link to="/news">Show more</Link>
           </Typography>
+          <News crypto={"crypto"} limit={6}/>
         </div>
       </div>
     </>

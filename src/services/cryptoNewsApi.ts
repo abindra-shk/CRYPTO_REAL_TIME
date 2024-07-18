@@ -1,15 +1,14 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const cryptoNewsHeaders = {
-  "x-rapidapi-key": "4a81aab5ecmshe499c309127b633p16f7c2jsn604327459f6d",
-  "x-rapidapi-host": "real-time-news-data.p.rapidapi.com",
+  "x-rapidapi-key": "4614529fa9mshc66ee9fbcca50b9p1c14d7jsnf94af5f4ed32",
+  "x-rapidapi-host": " real-time-news-data.p.rapidapi.com",
 };
 
 const baseUrl = "https://real-time-news-data.p.rapidapi.com/search";
 const createRequest = (url: string) => ({ url, headers: cryptoNewsHeaders });
 console.log("Request URL:", URL);
 console.log("Request Headers:", cryptoNewsHeaders);
-
 
 export const cryptoNewsApi = createApi({
   reducerPath: "cryptoNewsApi",
